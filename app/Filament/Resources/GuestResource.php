@@ -24,12 +24,12 @@ class GuestResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::whereDate('created_at', Carbon::today())->count();
+        return (string) static::getModel()::whereDate('created_at', now()->today())->count();
     }
 
     public static function getNavigationBadgeColor(): ?string
     {
-        return 'success';
+        return static::getNavigationBadge() > 0 ? 'success' : 'gray';
     }
 
     public static function form(Form $form): Form
@@ -42,6 +42,8 @@ class GuestResource extends Resource
                 ->options([
                     'Kepala Dinas' => 'Kepala Dinas',
                     'Sekretaris' => 'Sekretaris',
+                    'Umum dan Kepegawaian' => 'Umum dan Kepegawaian',
+                    'Keuangan dan Program' => 'Keuangan dan Program',
                     'Aplikasi dan Informatika (APTIKA)' => 'Aplikasi dan Informatika (APTIKA)',
                     'Informasi dan Komunikasi Publik (IKP)' => 'Informasi dan Komunikasi Publik (IKP)',
                     'Statistik dan Persandian' => 'Statistik dan Persandian',
@@ -50,123 +52,126 @@ class GuestResource extends Resource
         ]);
     }
 
-    public static function table(Table $table): Table
-    {
-        return $table
-            ->defaultSort('created_at', 'desc') 
-            ->columns([
-                Tables\Columns\TextColumn::make('nama')
-                    ->searchable()
-                    ->weight('bold')
-                    ->label('Nama Pengunjung'),
-                Tables\Columns\TextColumn::make('instansi')
-                    ->label('Asal Instansi')
-                    ->icon('heroicon-m-building-office'),
-                Tables\Columns\TextColumn::make('telepon')
-                    ->label('No. Telepon')
-                    ->icon('heroicon-m-phone')
-                    ->copyable()
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('bidang')
-                    ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'Aplikasi dan Informatika (APTIKA)' => 'info',
-                        'Informasi dan Komunikasi Publik (IKP)' => 'warning',
-                        'Statistik dan Persandian' => 'success',
-                        default => 'gray',
-                    }),
-                Tables\Columns\TextColumn::make('keperluan')
-                    ->label('Keperluan')
-                    ->wrap() 
-                    ->limit(50), 
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label('Waktu Kedatangan')
-                    ->dateTime('d M Y, H:i')
-                    ->sortable(),
-            ])
-            ->filters([
-                SelectFilter::make('periode')
-                    ->label('Filter Statistik')
-                    ->options([
-                        'minggu' => 'Minggu Ini',
-                        'bulan' => 'Bulan Ini',
-                        'tahun' => 'Tahun Ini',
-                    ])
-                    ->query(function (Builder $query, array $data): Builder {
-                        return $query->when($data['value'], function (Builder $query, $value) {
-                            if ($value === 'minggu') {
-                                return $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
-                            }
-                            if ($value === 'bulan') {
-                                return $query->whereMonth('created_at', Carbon::now()->month)
-                                             ->whereYear('created_at', Carbon::now()->year);
-                            }
-                            if ($value === 'tahun') {
-                                return $query->whereYear('created_at', Carbon::now()->year);
-                            }
-                            return $query;
-                        });
-                    }),
+        public static function table(Table $table): Table
+            {
+                return $table
+                    ->defaultSort('created_at', 'desc')
+                    ->columns([
+                        Tables\Columns\TextColumn::make('nama')
+                            ->searchable()
+                            ->weight('bold')
+                            ->color('primary')
+                            ->label('Nama Pengunjung'),
+                        
+                        Tables\Columns\TextColumn::make('instansi')
+                            ->label('Asal Instansi')
+                            ->icon('heroicon-m-building-office')
+                            ->iconColor('gray'),
 
-                SelectFilter::make('bidang')
-                    ->options([
-                        'Kepala Dinas' => 'Kepala Dinas',
-                        'Sekretaris' => 'Sekretaris',
-                        'Umum dan Kepegawaian' => 'Umum dan Kepegawaian',
-                        'Keuangan dan Program' => 'Keuangan dan Program',
-                        'Informasi dan Komunikasi Publik (IKP)' => 'Informasi dan Komunikasi Publik (IKP)',
-                        'Aplikasi dan Informatika (APTIKA)' => 'Aplikasi dan Informatika (APTIKA)',
-                        'Statistik dan Persandian' => 'Statistik dan Persandian',
-                    ]),
-                
-                Filter::make('created_at')
-                    ->form([
-                        \Filament\Forms\Components\DatePicker::make('dari_tanggal')->label('Dari Tanggal'),
-                        \Filament\Forms\Components\DatePicker::make('sampai_tanggal')->label('Sampai Tanggal'),
+                        Tables\Columns\TextColumn::make('bidang')
+                            ->badge()
+                            ->color(fn (string $state): string => match ($state) {
+                                'Kepala Dinas', 'Sekretaris' => 'warning',
+                                'Aplikasi dan Informatika (APTIKA)' => 'info',
+                                'Informasi dan Komunikasi Publik (IKP)' => 'success',
+                                default => 'primary',
+                            }),
+
+                        Tables\Columns\TextColumn::make('created_at')
+                            ->label('Waktu Kedatangan')
+                            ->dateTime('d M Y')
+                            ->description(fn ($record) => $record->created_at->format('H:i') . ' WIB')
+                            ->sortable(),
                     ])
-                    ->query(function (Builder $query, array $data): Builder {
-                        return $query
-                            ->when(
-                                $data['dari_tanggal'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
-                            )
-                            ->when(
-                                $data['sampai_tanggal'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
-                            );
-                    })
-            ])
-            ->headerActions([
-                Action::make('cetak_pdf')
-                    ->label('Cetak Laporan PDF')
-                    ->icon('heroicon-o-printer')
-                    ->color('danger')
-                    ->action(function (Tables\Contracts\HasTable $livewire) {
-                        $records = $livewire->getFilteredTableQuery()->get(); 
-                        $pdf = Pdf::loadView('pdf.laporan', ['guests' => $records]);
-                        return response()->streamDownload(
-                            fn () => print($pdf->output()),
-                            'laporan-tamu-' . date('Y-m-d') . '.pdf'
-                        );
-                    }),
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()
-                    ->label('Hapus') 
-                    ->modalHeading('Hapus Data Tamu') 
-                    ->successNotificationTitle('Data tamu berhasil dihapus'),
-            ])
-            // UNTUK MENGHILANGKAN BARIS "DELETE SELECTED" DAN "SELECT ALL", 
-            // KITA KOSONGKAN ARRAY BULKACTIONS ATAU HAPUS BAGIAN INI
-            ->bulkActions([]);
-    }
+                    ->filters([
+                        // 1. Filter Periode (Minggu, Bulan, Tahun)
+                        SelectFilter::make('periode')
+                            ->label('Filter Statistik')
+                            ->options([
+                                'minggu' => 'Minggu Ini',
+                                'bulan' => 'Bulan Ini',
+                                'tahun' => 'Tahun Ini',
+                            ])
+                            ->native(false)
+                            ->query(function (Builder $query, array $data): Builder {
+                                $value = $data['value'] ?? null;
+                                return $query->when($value, function (Builder $query, $value) {
+                                    if ($value === 'minggu') {
+                                        return $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+                                    }
+                                    if ($value === 'bulan') {
+                                        return $query->whereMonth('created_at', Carbon::now()->month)
+                                                    ->whereYear('created_at', Carbon::now()->year);
+                                    }
+                                    if ($value === 'tahun') {
+                                        return $query->whereYear('created_at', Carbon::now()->year);
+                                    }
+                                    return $query;
+                                });
+                            }),
+
+                        // 2. Filter Berdasarkan Bidang
+                        SelectFilter::make('bidang')
+                            ->label('Filter Bidang')
+                            ->options([
+                                'Kepala Dinas' => 'Kepala Dinas',
+                                'Sekretaris' => 'Sekretaris',
+                                'Umum dan Kepegawaian' => 'Umum dan Kepegawaian',
+                                'Keuangan dan Program' => 'Keuangan dan Program',
+                                'Informasi dan Komunikasi Publik (IKP)' => 'Informasi dan Komunikasi Publik (IKP)',
+                                'Aplikasi dan Informatika (APTIKA)' => 'Aplikasi dan Informatika (APTIKA)',
+                                'Statistik dan Persandian' => 'Statistik dan Persandian',
+                            ])
+                            ->native(false),
+
+                        // 3. Filter Rentang Tanggal Manual
+                        Filter::make('created_at')
+                            ->form([
+                                \Filament\Forms\Components\DatePicker::make('dari_tanggal')->label('Dari Tanggal'),
+                                \Filament\Forms\Components\DatePicker::make('sampai_tanggal')->label('Sampai Tanggal'),
+                            ])
+                            ->query(function (Builder $query, array $data): Builder {
+                                return $query
+                                    ->when(
+                                        $data['dari_tanggal'],
+                                        fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                                    )
+                                    ->when(
+                                        $data['sampai_tanggal'],
+                                        fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                                    );
+                            })
+                    ], layout: \Filament\Tables\Enums\FiltersLayout::AboveContent) // LAYOUT DIUBAH KE ABOVE CONTENT
+
+                    ->headerActions([
+                        Action::make('cetak_pdf')
+                            ->label('Cetak Laporan PDF')
+                            ->icon('heroicon-o-printer')
+                            ->color('warning')
+                            ->action(function (Tables\Contracts\HasTable $livewire) {
+                                $records = $livewire->getFilteredTableQuery()->get(); 
+                                $pdf = Pdf::loadView('pdf.laporan', ['guests' => $records]);
+                                return response()->streamDownload(
+                                    fn () => print($pdf->output()),
+                                    'laporan-tamu-' . date('Y-m-d') . '.pdf'
+                                );
+                            }),
+                    ])
+                    ->actions([
+                        Tables\Actions\EditAction::make(),
+                        Tables\Actions\DeleteAction::make()
+                            ->label('Hapus') 
+                            ->modalHeading('Hapus Data Tamu') 
+                            ->successNotificationTitle('Data tamu berhasil dihapus'),
+                        ])
+                        ->bulkActions([]);
+            }
 
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListGuests::route('/'),
-            'create' => Pages\CreateGuest::route('/create'),
+            'create' => Pages\CreateGuest::route('/create'), // Ganti bagian ini jika sebelumnya tertulis ::create
             'edit' => Pages\EditGuest::route('/{record}/edit'),
         ];
     }
