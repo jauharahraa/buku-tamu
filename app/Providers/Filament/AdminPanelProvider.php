@@ -66,7 +66,10 @@ class AdminPanelProvider extends PanelProvider
 
                         /* FIX: DROPDOWN & MODAL Z-INDEX */
                         .fi-dropdown-panel {
-                            z-index: 9999 !important;
+                            position: absolute !important;
+                            top: 100% !important;
+                            bottom: auto !important;
+                            margin-top: 0.5rem !important;
                         }
 
                         /* === TOP NAVIGATION BAR STICKY === */
@@ -87,11 +90,16 @@ class AdminPanelProvider extends PanelProvider
                         }
 
                         /* === HAMBURGER ICON === */
-                        .fi-sidebar-header button svg, 
-                        .fi-sidebar-header button span svg {
+                       /* 1. HAPUS ICON DEFAULT AGAR TIDAK DOUBLE */
+                        /* Menyembunyikan svg bawaan agar tidak bentrok dengan icon buatan kita */
+                        .fi-sidebar-header button svg,
+                        .fi-topbar button svg,
+                        .fi-topbar-close-button svg {
                             display: none !important;
                         }
 
+                        /* 2. ICON HAMBURGER: Hanya muncul satu di sidebar header */
+                        /* Menggunakan base64 sederhana agar tidak merah di editor */
                         .fi-sidebar-header button::before {
                             content: "";
                             display: block;
@@ -101,6 +109,7 @@ class AdminPanelProvider extends PanelProvider
                             -webkit-mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke-width=\'1.5\' stroke=\'currentColor\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' d=\'M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5\'/%3E%3C/svg%3E");
                             mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke-width=\'1.5\' stroke=\'currentColor\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' d=\'M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5\'/%3E%3C/svg%3E");
                             -webkit-mask-repeat: no-repeat;
+                            -webkit-mask-repeat: no-repeat;
                             mask-repeat: no-repeat;
                             -webkit-mask-position: center;
                             mask-position: center;
@@ -108,6 +117,13 @@ class AdminPanelProvider extends PanelProvider
                             mask-size: contain;
                         }
 
+                        /* Style tombol hamburger agar rapi */
+                        .fi-sidebar-header button {
+                            padding: 0.5rem !important;
+                            border-radius: 12px !important;
+                            background: rgba(255, 107, 53, 0.1) !important;
+                            color: var(--primary-orange) !important;
+                        }
                         .fi-sidebar-header button {
                             padding: 0.5rem !important;
                             border-radius: 12px !important;

@@ -11,7 +11,8 @@ use Filament\Tables\Table;
 use Filament\Tables\Actions\Action; 
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Columns\TextColumn; // Baris ini ditambahkan sesuai permintaan
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\FiltersLayout; // Tambahkan import ini
 use Barryvdh\DomPDF\Facade\Pdf;      
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon; 
@@ -58,7 +59,6 @@ class GuestResource extends Resource
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
-                // Kolom ID Kunjungan ditambahkan di sini agar muncul di paling kiri
                 TextColumn::make('id') 
                     ->label('ID Kunjungan')
                     ->searchable()
@@ -96,7 +96,6 @@ class GuestResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                // 1. Filter Periode (Minggu, Bulan, Tahun)
                 SelectFilter::make('periode')
                     ->label('Filter Statistik')
                     ->options([
@@ -122,7 +121,6 @@ class GuestResource extends Resource
                         });
                     }),
 
-                // 2. Filter Berdasarkan Bidang
                 SelectFilter::make('bidang')
                     ->label('Filter Bidang')
                     ->options([
@@ -136,7 +134,6 @@ class GuestResource extends Resource
                     ])
                     ->native(false),
 
-                // 3. Filter Rentang Tanggal Manual
                 Filter::make('created_at')
                     ->form([
                         \Filament\Forms\Components\DatePicker::make('dari_tanggal')->label('Dari Tanggal'),
@@ -153,8 +150,12 @@ class GuestResource extends Resource
                                 fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
                     })
-            ], layout: \Filament\Tables\Enums\FiltersLayout::AboveContent) // LAYOUT DIUBAH KE ABOVE CONTENT
-
+            ], layout: FiltersLayout::Modal) // MENGUBAH LAYOUT MENJADI MODAL (Icon kecil di samping search)
+            ->filtersTriggerAction(
+                fn (Tables\Actions\Action $action) => $action
+                    ->button()
+                    ->label('Filter'),
+            )
             ->headerActions([
                 Action::make('cetak_pdf')
                     ->label('Cetak Laporan PDF')
