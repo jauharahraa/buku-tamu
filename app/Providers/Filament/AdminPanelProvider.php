@@ -137,9 +137,9 @@ class AdminPanelProvider extends PanelProvider
 
                         /* === SIDEBAR REDESIGN === */
                         .fi-sidebar {
-                            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+                            background: linear-gradient(135deg, rgba(0, 84, 166, 0.95) 0%, rgba(154, 192, 230, 0.95) 100%);
                             border-right: 1px solid rgba(226, 232, 240, 0.8) !important;
-                            box-shadow: 8px 0 40px rgba(15, 76, 129, 0.08) !important;
+                            box-shadow: 8px 0 40px rgba(69, 125, 174, 0.08) !important;
                             backdrop-filter: blur(20px) !important;
                         }
 

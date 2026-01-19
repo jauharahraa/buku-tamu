@@ -55,4 +55,4 @@ class StatistikKunjungan extends Page
     {
         return 1;
     }
-}
+} 
