@@ -18,6 +18,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings; 
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Filament\Support\Colors\Color;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -30,7 +31,7 @@ class AdminPanelProvider extends PanelProvider
             ->login() 
             ->darkMode(false)
             ->brandName('E-Tamu Diskominfo Binjai')
-            ->brandLogo(asset('images/logo-binjai.jpg'))
+            ->brandLogo(asset('images/logo-binjai-removebg-preview.png'))
             ->brandLogoHeight('4rem')
             ->favicon(asset('favicon.ico'))
             // --- RENDER HOOK UNTUK FOOTER & STICKY NAVBAR ---
@@ -43,140 +44,134 @@ class AdminPanelProvider extends PanelProvider
                     </footer>
                 '),
             )
-            ->renderHook(
-                PanelsRenderHook::HEAD_START,
-                fn (): string => Blade::render('
-                    <style>
-                        /* Import Google Font */
-                        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap");
+->renderHook(
+    'panels::head.end',
+    fn () => new \Illuminate\Support\HtmlString("
+        <style>
+            :root {
+                --bg-dongker: #0f172a; 
+                --primary-orange: #FF6B35;
+            }
 
-                        :root {
-                            --primary-blue: #0F4C81;
-                            --secondary-blue: #1E5A8E;
-                            --primary-orange: #FF6B35;
-                            --secondary-orange: #FF8C42;
-                            --accent-orange: #FFA366;
-                            --light-orange: #FFE5D9;
-                            --dark-blue: #0A3A5C;
-                        }
+            /* 1. SIDEBAR & NAVBAR DASAR */
+            .fi-sidebar, .fi-sidebar-header, .fi-layout header.fi-topbar {
+                background-color: var(--bg-dongker) !important;
+            }
 
-                        * {
-                            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                        }
+            .fi-sidebar {
+                border-right: 3px solid var(--primary-orange) !important;
+            }
 
-                        /* FIX: DROPDOWN & MODAL Z-INDEX */
-                        .fi-dropdown-panel {
-                            position: absolute !important;
-                            top: 100% !important;
-                            bottom: auto !important;
-                            margin-top: 0.5rem !important;
-                        }
+            /* 2. WARNA FONT DEFAULT */
+            .fi-sidebar nav * {
+                color: white !important;
+            }
 
-                        /* === TOP NAVIGATION BAR STICKY === */
-                        .fi-topbar {
-                            position: sticky !important;
-                            top: 0 !important;
-                            z-index: 35 !important;
-                            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #ffffff 100%) !important;
-                            border-bottom: 3px solid transparent !important;
-                            border-image: linear-gradient(90deg, #FF6B35, #FF8C42, #FF6B35) 1 !important;
-                            box-shadow: 0 4px 20px rgba(15, 76, 129, 0.12) !important;
-                            backdrop-filter: blur(10px) !important;
-                        }
+            /* KHUSUS NAV BAR (TOPBAR) JADI HITAM */
+            .fi-topbar *:not(.fi-dropdown *), .fi-topbar svg:not(.fi-dropdown *) {
+                color: #000000 !important;
+            }
+            
+            .fi-dropdown-list-item-label, 
+            .fi-dropdown-list-item-icon {
+                color: #334155 !important;
+            }
 
-                        /* Memastikan konten tidak tertutup navbar sticky */
-                        .fi-main {
-                            overflow: visible !important;
-                        }
+            /* 3. LOGO SIDEBAR & TEKS */
+            .fi-sidebar-header {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                padding: 3rem 1rem 2rem !important;
+                min-height: 220px !important;
+            }
 
-                        /* === HAMBURGER ICON === */
-                       /* 1. HAPUS ICON DEFAULT AGAR TIDAK DOUBLE */
-                        /* Menyembunyikan svg bawaan agar tidak bentrok dengan icon buatan kita */
-                        .fi-sidebar-header button svg,
-                        .fi-topbar button svg,
-                        .fi-topbar-close-button svg {
-                            display: none !important;
-                        }
+            .fi-sidebar-header a {
+                display: flex !important;
+                justify-content: center !important;
+                align-items: center !important;
+                background-color: white !important;
+                width: 90px !important;
+                height: 90px !important;
+                border-radius: 50% !important;
+                margin-bottom: 15px !important;
+                overflow: hidden !important;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+            }
 
-                        /* 2. ICON HAMBURGER: Hanya muncul satu di sidebar header */
-                        /* Menggunakan base64 sederhana agar tidak merah di editor */
-                        .fi-sidebar-header button::before {
-                            content: "";
-                            display: block;
-                            width: 24px;
-                            height: 24px;
-                            background-color: currentColor;
-                            -webkit-mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke-width=\'1.5\' stroke=\'currentColor\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' d=\'M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5\'/%3E%3C/svg%3E");
-                            mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke-width=\'1.5\' stroke=\'currentColor\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' d=\'M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5\'/%3E%3C/svg%3E");
-                            -webkit-mask-repeat: no-repeat;
-                            -webkit-mask-repeat: no-repeat;
-                            mask-repeat: no-repeat;
-                            -webkit-mask-position: center;
-                            mask-position: center;
-                            -webkit-mask-size: contain;
-                            mask-size: contain;
-                        }
+            .fi-sidebar-header::after {
+                content: 'DISKOMINFO\\A K O T A   B I N J A I';
+                white-space: pre;
+                text-align: center;
+                color: white;
+                font-weight: 800;
+                font-size: 1.1rem;
+                line-height: 1.2;
+                letter-spacing: 1px;
+            }
 
-                        /* Style tombol hamburger agar rapi */
-                        .fi-sidebar-header button {
-                            padding: 0.5rem !important;
-                            border-radius: 12px !important;
-                            background: rgba(255, 107, 53, 0.1) !important;
-                            color: var(--primary-orange) !important;
-                        }
-                        .fi-sidebar-header button {
-                            padding: 0.5rem !important;
-                            border-radius: 12px !important;
-                            background: rgba(255, 107, 53, 0.1) !important;
-                        }
+            .fi-sidebar-header-brand { display: none !important; }
 
-                        .fi-sidebar-header button:hover {
-                            background: rgba(255, 107, 53, 0.25) !important;
-                            transform: rotate(90deg) scale(1.1) !important;
-                        }
+            /* 4. NAVBAR (TOPBAR) */
+            .fi-topbar button {
+                order: -1 !important;
+                margin-right: auto !important;
+            }
 
-                        /* === SIDEBAR REDESIGN === */
-                        .fi-sidebar {
-                            background: linear-gradient(135deg, rgba(0, 84, 166, 0.95) 0%, rgba(154, 192, 230, 0.95) 100%);
-                            border-right: 1px solid rgba(226, 232, 240, 0.8) !important;
-                            box-shadow: 8px 0 40px rgba(69, 125, 174, 0.08) !important;
-                            backdrop-filter: blur(20px) !important;
-                        }
+            /* 5. MENU AKTIF & HOVER */
+            .fi-sidebar-item-active,
+            .fi-sidebar-item:hover:not(.fi-sidebar-item-active) { 
+                background-color: white !important; 
+            }
 
-                        .fi-sidebar-header {
-                            padding: 1.5rem !important;
-                            border-bottom: 2px solid rgba(255, 107, 53, 0.1) !important;
-                        }
+            .fi-sidebar-item-active *, 
+            .fi-sidebar-item:hover * {
+                color: #000000 !important;
+            }
 
-                        /* === NAVIGATION ITEMS === */
-                        .fi-sidebar-nav-item {
-                            border-radius: 12px !important;
-                            margin: 0.25rem 0.75rem !important;
-                        }
+            /* 7. ICON HAMBURGER */
+            .fi-sidebar-collapse-button svg,
+            .fi-sidebar-close-button svg {
+                display: none !important;
+            }
 
-                        .fi-sidebar-nav-item:hover {
-                            transform: translateX(4px) !important;
-                        }
+            .fi-sidebar-collapse-button::before,
+            .fi-sidebar-close-button::before {
+                content: '';
+                display: block;
+                width: 24px;
+                height: 24px;
+                background-color: var(--primary-orange) !important;
+                -webkit-mask-image: url(\"data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 24 24%27 stroke-width=%271.5%27 stroke=%27currentColor%27%3E%3Cpath stroke-linecap=%27round%27 stroke-linejoin=%27round%27 d=%27M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5%27/%3E%3C/svg%3E\");
+                mask-image: url(\"data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 24 24%27 stroke-width=%271.5%27 stroke=%27currentColor%27%3E%3Cpath stroke-linecap=%27round%27 stroke-linejoin=%27round%27 d=%27M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5%27/%3E%3C/svg%3E\");
+                mask-repeat: no-repeat;
+                mask-size: contain;
+            }
 
-                        /* === BUTTONS & CARDS === */
-                        .fi-btn-primary {
-                            background: linear-gradient(135deg, #FF6B35 0%, #FF8C42 100%) !important;
-                        }
+            /* 8. BADGE ANGKA HITAM */
+            .fi-sidebar-item-badge {
+                display: flex !important;
+                background-color: #f1f5f9 !important;
+                border-radius: 6px !important;
+                padding: 0px 6px !important;
+            }
 
-                        /* === TABLES === */
-                        .fi-table-header-cell {
-                            background: #0F4C81 !important;
-                            color: #ffffff !important;
-                        }
+            .fi-sidebar-item-badge span {
+                color: #000000 !important;
+                font-weight: bold !important;
+            }
 
-                        /* === FOOTER === */
-                        .fi-footer {
-                            border-top: 1px solid rgba(226, 232, 240, 0.8);
-                            background: #f8fafc;
-                        }
-                    </style>
-                '),
-            )
+            /* 9. PERBAIKAN GRAFIK AGAR FIT DI LAYAR */
+            .fi-wi-chart canvas {
+                max-height: 280px !important; /* Membatasi tinggi grafik */
+            }
+
+            .fi-wi-stats-overview-stat {
+                margin-bottom: 0.5rem !important; /* Mengecilkan jarak antar card statistik */
+            }
+        </style>
+    "),
+)
             ->colors([
                 'primary' => [
                     50 => '#e8f4ff',
@@ -195,12 +190,15 @@ class AdminPanelProvider extends PanelProvider
                 'success' => '#10B981',
                 'danger' => '#EF4444',
                 'info' => '#3b82f6',
+                'primary' => Color::Blue,
+                'warning' => Color::Orange,
             ])
+            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
+            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->font('Poppins')
             ->sidebarCollapsibleOnDesktop()
             ->maxContentWidth('full')
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
                 Pages\Dashboard::class,
             ])
@@ -220,5 +218,6 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ]);
+           
     }
 }

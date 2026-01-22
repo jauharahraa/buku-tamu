@@ -1,0 +1,99 @@
+/* Warna Diskominfo - Biru & Oranye */
+
+/* Sidebar dengan gradient biru */
+.fi-sidebar {
+    background: linear-gradient(180deg, #2563EB 0%, #1E3A8A 100%) !important;
+}
+
+/* Topbar dengan gradient biru */
+.fi-topbar {
+    background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%) !important;
+}
+
+/* Item sidebar yang aktif - aksen oranye */
+.fi-sidebar-item-active,
+.fi-sidebar-item.fi-active {
+    background-color: rgba(249, 115, 22, 0.2) !important;
+    border-left: 4px solid #F97316 !important;
+}
+
+/* Hover effect sidebar */
+.fi-sidebar-item:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Background halaman tidak terlalu putih polos */
+.fi-main {
+    background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 50%) !important;
+}
+
+/* Card/Section dengan border biru */
+.fi-section {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
+    border-left: 4px solid #2563EB;
+    border-radius: 8px;
+}
+
+/* Button primary dengan warna oranye */
+.fi-btn-primary {
+    background: linear-gradient(135deg, #F97316 0%, #EA580C 100%) !important;
+    border: none !important;
+}
+
+.fi-btn-primary:hover {
+    background: linear-gradient(135deg, #EA580C 0%, #C2410C 100%) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+}
+
+/* Header halaman */
+.fi-header-heading {
+    background: linear-gradient(90deg, #2563EB 0%, #F97316 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Stats Widget lebih menarik */
+.fi-stats-card {
+    background: linear-gradient(135deg, #EFF6FF 0%, #FFFFFF 100%);
+    border: 1px solid #BFDBFE;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+    transition: all 0.3s ease;
+}
+
+.fi-stats-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.2);
+}
+
+/* Chart area background */
+.fi-wi-stats-overview-stat {
+    background: linear-gradient(135deg, #EFF6FF 0%, #FFFFFF 100%);
+    border-radius: 12px;
+    border: 1px solid #DBEAFE;
+}
+
+/* Badge dengan warna oranye */
+.fi-badge-warning {
+    background-color: #F97316 !important;
+    color: white !important;
+}
+
+/* Table header */
+.fi-ta-header {
+    background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+}
+
+/* Form section */
+.fi-fo-section {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
+    border-left: 3px solid #2563EB;
+}
+
+/* Tabs */
+.fi-tabs-item-active {
+    color: #F97316 !important;
+    border-bottom-color: #F97316 !important;
+}

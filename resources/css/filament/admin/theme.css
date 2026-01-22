@@ -1,0 +1,43 @@
+@import '/vendor/filament/filament/resources/css/theme.css';
+
+@config 'tailwind.config.js';
+
+/* Custom styling Diskominfo */
+:root {
+    --primary-50: #EFF6FF;
+    --primary-100: #DBEAFE;
+    --primary-500: #2563EB;
+    --primary-600: #1E40AF;
+    --accent-500: #F97316;
+}
+
+/* Sidebar gradient */
+.fi-sidebar {
+    background: linear-gradient(180deg, #ebba25 0%, #1e8a4f 100%) !important;
+}
+
+/* Topbar gradient */
+.fi-topbar {
+    background: linear-gradient(135deg, #eb7125 0%, #15e92e 100%) !important;
+}
+
+/* Active sidebar item */
+.fi-sidebar-item-active {
+    background-color: rgba(249, 115, 22, 0.2) !important;
+    border-left: 4px solid #F97316 !important;
+}
+
+/* Stats card background */
+.fi-section {
+    background: linear-gradient(135deg, #F8FAFC 0%, #FFFFFF 100%);
+}
+
+/* Button primary dengan warna oranye */
+.fi-btn-primary {
+    background: linear-gradient(135deg, #F97316 0%, #EA580C 100%) !important;
+    border: none !important;
+}
+
+.fi-btn-primary:hover {
+    background: linear-gradient(135deg, #EA580C 0%, #C2410C 100%) !important;
+}
