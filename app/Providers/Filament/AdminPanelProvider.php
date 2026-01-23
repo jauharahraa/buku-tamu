@@ -34,7 +34,10 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogo(asset('images/logo-binjai-removebg-preview.png'))
             ->brandLogoHeight('4rem')
             ->favicon(asset('favicon.ico'))
-            // --- RENDER HOOK UNTUK FOOTER & STICKY NAVBAR ---
+            ->font('Poppins')
+            ->maxContentWidth('full')
+            
+            // FOOTER
             ->renderHook(
                 PanelsRenderHook::FOOTER,
                 fn (): string => Blade::render('
@@ -44,166 +47,171 @@ class AdminPanelProvider extends PanelProvider
                     </footer>
                 '),
             )
-->renderHook(
-    'panels::head.end',
-    fn () => new \Illuminate\Support\HtmlString("
-        <style>
-            :root {
-                --bg-dongker: #0f172a; 
-                --primary-orange: #FF6B35;
-            }
-
-            /* 1. SIDEBAR & NAVBAR DASAR */
-            .fi-sidebar, .fi-sidebar-header, .fi-layout header.fi-topbar {
-                background-color: var(--bg-dongker) !important;
-            }
-
-            .fi-sidebar {
-                border-right: 3px solid var(--primary-orange) !important;
-            }
-
-            /* 2. WARNA FONT DEFAULT */
-            .fi-sidebar nav * {
-                color: white !important;
-            }
-
-            /* KHUSUS NAV BAR (TOPBAR) JADI HITAM */
-            .fi-topbar *:not(.fi-dropdown *), .fi-topbar svg:not(.fi-dropdown *) {
-                color: #000000 !important;
-            }
             
-            .fi-dropdown-list-item-label, 
-            .fi-dropdown-list-item-icon {
-                color: #334155 !important;
-            }
+            // CUSTOM CSS
+            ->renderHook(
+                'panels::head.end',
+                fn () => new \Illuminate\Support\HtmlString("
+                    <style>
+                        :root {
+                            --bg-dongker: #0f172a; 
+                            --primary-orange: #FF6B35;
+                        }
 
-            /* 3. LOGO SIDEBAR & TEKS */
-            .fi-sidebar-header {
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: center !important;
-                padding: 3rem 1rem 2rem !important;
-                min-height: 220px !important;
-            }
+                        /* SIDEBAR & NAVBAR */
+                        .fi-sidebar, .fi-sidebar-header, .fi-layout header.fi-topbar {
+                            background-color: var(--bg-dongker) !important;
+                        }
 
-            .fi-sidebar-header a {
-                display: flex !important;
-                justify-content: center !important;
-                align-items: center !important;
-                background-color: white !important;
-                width: 90px !important;
-                height: 90px !important;
-                border-radius: 50% !important;
-                margin-bottom: 15px !important;
-                overflow: hidden !important;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
-            }
+                        .fi-sidebar {
+                            border-right: 3px solid var(--primary-orange) !important;
+                            position: relative !important;
+                        }
 
-            .fi-sidebar-header::after {
-                content: 'DISKOMINFO\\A K O T A   B I N J A I';
-                white-space: pre;
-                text-align: center;
-                color: white;
-                font-weight: 800;
-                font-size: 1.1rem;
-                line-height: 1.2;
-                letter-spacing: 1px;
-            }
+                        /* WARNA FONT SIDEBAR */
+                        .fi-sidebar nav * {
+                            color: white !important;
+                        }
 
-            .fi-sidebar-header-brand { display: none !important; }
+                        /* LOGO & HEADER SIDEBAR */
+                        .fi-sidebar-header {
+                            display: flex !important;
+                            flex-direction: column !important;
+                            align-items: center !important;
+                            padding: 2rem 1rem 1.5rem !important;
+                            min-height: 180px !important;
+                            position: relative !important;
+                        }
 
-            /* 4. NAVBAR (TOPBAR) */
-            .fi-topbar button {
-                order: -1 !important;
-                margin-right: auto !important;
-            }
+                        .fi-sidebar-header a {
+                            display: flex !important;
+                            justify-content: center !important;
+                            align-items: center !important;
+                            background-color: white !important;
+                            width: 80px !important;
+                            height: 80px !important;
+                            border-radius: 50% !important;
+                            margin-bottom: 12px !important;
+                            overflow: hidden !important;
+                            box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+                        }
 
-            /* 5. MENU AKTIF & HOVER */
-            .fi-sidebar-item-active,
-            .fi-sidebar-item:hover:not(.fi-sidebar-item-active) { 
-                background-color: white !important; 
-            }
+                        .fi-sidebar-header::after {
+                            content: 'DISKOMINFO\\A K O T A   B I N J A I';
+                            white-space: pre;
+                            text-align: center;
+                            color: white;
+                            font-weight: 800;
+                            font-size: 1rem;
+                            line-height: 1.2;
+                            letter-spacing: 1px;
+                        }
 
-            .fi-sidebar-item-active *, 
-            .fi-sidebar-item:hover * {
-                color: #000000 !important;
-            }
+                        .fi-sidebar-header-brand { 
+                            display: none !important; 
+                        }
 
-            /* 7. ICON HAMBURGER */
-            .fi-sidebar-collapse-button svg,
-            .fi-sidebar-close-button svg {
-                display: none !important;
-            }
+                        /* SEMBUNYIKAN TOMBOL COLLAPSE/HAMBURGER */
+                        .fi-sidebar-collapse-button,
+                        .fi-sidebar-close-button {
+                            display: none !important;
+                        }
 
-            .fi-sidebar-collapse-button::before,
-            .fi-sidebar-close-button::before {
-                content: '';
-                display: block;
-                width: 24px;
-                height: 24px;
-                background-color: var(--primary-orange) !important;
-                -webkit-mask-image: url(\"data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 24 24%27 stroke-width=%271.5%27 stroke=%27currentColor%27%3E%3Cpath stroke-linecap=%27round%27 stroke-linejoin=%27round%27 d=%27M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5%27/%3E%3C/svg%3E\");
-                mask-image: url(\"data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 24 24%27 stroke-width=%271.5%27 stroke=%27currentColor%27%3E%3Cpath stroke-linecap=%27round%27 stroke-linejoin=%27round%27 d=%27M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5%27/%3E%3C/svg%3E\");
-                mask-repeat: no-repeat;
-                mask-size: contain;
-            }
+                        /* MENU AKTIF & HOVER */
+                        .fi-sidebar-item-active {
+                            background-color: white !important;
+                            border-radius: 8px !important;
+                        }
 
-            /* 8. BADGE ANGKA HITAM */
-            .fi-sidebar-item-badge {
-                display: flex !important;
-                background-color: #f1f5f9 !important;
-                border-radius: 6px !important;
-                padding: 0px 6px !important;
-            }
+                        .fi-sidebar-item-active *, 
+                        .fi-sidebar-item-active span,
+                        .fi-sidebar-item-active svg {
+                            color: #000000 !important;
+                            fill: #000000 !important;
+                        }
 
-            .fi-sidebar-item-badge span {
-                color: #000000 !important;
-                font-weight: bold !important;
-            }
+                        .fi-sidebar-item:hover {
+                            background-color: rgba(255, 255, 255, 0.9) !important;
+                            border-radius: 8px !important;
+                        }
 
-            /* 9. PERBAIKAN GRAFIK AGAR FIT DI LAYAR */
-            .fi-wi-chart canvas {
-                max-height: 280px !important; /* Membatasi tinggi grafik */
-            }
+                        .fi-sidebar-item:hover * {
+                            color: #000000 !important;
+                        }
 
-            .fi-wi-stats-overview-stat {
-                margin-bottom: 0.5rem !important; /* Mengecilkan jarak antar card statistik */
-            }
-        </style>
-    "),
-)
+                        /* SEMBUNYIKAN BADGE/NOTIFIKASI */
+                        .fi-sidebar-item-badge, 
+                        .fi-badge, 
+                        span.fi-badge {
+                            display: none !important;
+                        }
+
+                        /* OPTIMASI GRAFIK */
+                        .fi-wi-chart canvas, 
+                        .apexcharts-canvas, 
+                        .apexcharts-svg {
+                            max-height: 350px !important;
+                        }
+
+                        .fi-wi-stats-overview-stat {
+                            padding: 0.75rem !important;
+                        }
+
+                        .fi-section-content {
+                            padding: 1rem !important;
+                        }
+
+                        .fi-section {
+                            max-height: 500px !important;
+                        }
+
+                        /* PROFIL ADMIN (POJOK KANAN ATAS) */
+                        .fi-user-menu button {
+                            background-color: rgba(255, 255, 255, 0.1) !important;
+                            padding: 5px 12px !important;
+                            border-radius: 50px !important;
+                            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+                            transition: all 0.3s ease !important;
+                        }
+
+                        .fi-user-menu button:hover {
+                            background-color: var(--primary-orange) !important;
+                            border-color: var(--primary-orange) !important;
+                        }
+
+                        .fi-user-menu img, 
+                        .fi-user-menu .fi-avatar {
+                            border: 2px solid white !important;
+                            box-shadow: 0 2px 5px rgba(0,0,0,0.3) !important;
+                        }
+
+                        .fi-user-menu .fi-avatar {
+                            background-color: var(--primary-orange) !important;
+                            color: white !important;
+                            font-weight: bold !important;
+                        }
+                    </style>
+                "),
+            )
+            
             ->colors([
-                'primary' => [
-                    50 => '#e8f4ff',
-                    100 => '#d4e9ff',
-                    200 => '#a9d3ff',
-                    300 => '#7ebdff',
-                    400 => '#53a7ff',
-                    500 => '#1E5A8E',
-                    600 => '#0F4C81',
-                    700 => '#0A3A5C',
-                    800 => '#062D47',
-                    900 => '#042033',
-                    950 => '#02131F',
-                ],
-                'warning' => '#FF8C42',
+                'primary' => Color::Blue,
+                'warning' => Color::Orange,
                 'success' => '#10B981',
                 'danger' => '#EF4444',
                 'info' => '#3b82f6',
-                'primary' => Color::Blue,
-                'warning' => Color::Orange,
             ])
+            
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
-            ->font('Poppins')
-            ->sidebarCollapsibleOnDesktop()
-            ->maxContentWidth('full')
+            
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            
             ->widgets([])
+            
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -215,9 +223,9 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
+            
             ->authMiddleware([
                 Authenticate::class,
             ]);
-           
     }
 }
