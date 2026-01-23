@@ -190,6 +190,29 @@ class AdminPanelProvider extends PanelProvider
                             color: white !important;
                             font-weight: bold !important;
                         }
+
+                        /* DESAIN KHUSUS HALAMAN LOGIN */
+            .fi-simple-layout {
+                background-color: #0d3760 !important; /* Warna Background Luar */
+            }
+
+            .fi-simple-main-ctn {
+                border-top: 5px solid var(--primary-orange) !important;
+                border-radius: 12px !important;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+            }
+
+            /* Tombol Sign In agar Orange */
+            .fi-btn-color-primary {
+                background-color: var(--primary-orange) !important;
+            }
+
+            /* Tulisan Sign In */
+            .fi-simple-header-heading {
+                color: var(--bg-dongker) !important;
+                font-weight: 800 !important;
+                letter-spacing: -0.5px;
+            }
                     </style>
                 "),
             )

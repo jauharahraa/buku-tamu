@@ -27,7 +27,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 0.8rem 7%;
-            background: white;
+            background: rgb(255, 255, 255);
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             position: sticky;
             top: 0;
@@ -69,7 +69,7 @@
 
         .btn-login {
             background: var(--binjai-blue);
-            color: white;
+            color: rgb(255, 255, 255);
             padding: 7px 20px;
             border-radius: 50px;
             text-decoration: none;
@@ -95,7 +95,7 @@
         /* Footer Styling */
         .footer {
             background: var(--binjai-dark);
-            color: white;
+            color: rgb(50, 50, 120);
             padding: 40px 5% 20px;
             margin-top: 60px;
         }
