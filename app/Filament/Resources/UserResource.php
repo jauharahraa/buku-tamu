@@ -9,11 +9,11 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-// --- IMPORT DIPINDAHKAN KE SINI ---
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection; // Tambahkan import ini untuk Bulk Action
 
 class UserResource extends Resource
 {
@@ -63,11 +63,18 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                // PROTEKSI: Sembunyikan tombol delete jika email adalah admin@gmail.com
+                Tables\Actions\DeleteAction::make()
+                    ->hidden(fn (User $record): bool => $record->email === 'admin@gmail.com'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // PROTEKSI: Mencegah penghapusan admin utama melalui bulk delete
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->action(function (Collection $records) {
+                            $records->filter(fn ($record) => $record->email !== 'admin@gmail.com')
+                                    ->each(fn ($record) => $record->delete());
+                        }),
                 ]),
             ]);
     }
