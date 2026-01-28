@@ -19,9 +19,11 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationLabel = 'Kelola Admin';
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
-    protected static ?string $slug = 'kelola-admin';
+    protected static ?string $navigationLabel = 'Kelola Admin';
+    protected static ?string $modelLabel = 'Admin';
+    protected static ?string $pluralModelLabel = 'Admin';
+
 
     public static function form(Form $form): Form
     {
@@ -94,4 +96,6 @@ class UserResource extends Resource
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
+
+    
 }

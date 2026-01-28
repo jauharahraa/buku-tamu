@@ -29,7 +29,6 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login() 
-            ->sidebarCollapsible()
             ->darkMode(false)
             ->brandName('E-Tamu Diskominfo Binjai')
             ->brandLogo(asset('images/logo-binjai-removebg-preview.png'))
@@ -65,29 +64,10 @@ class AdminPanelProvider extends PanelProvider
                         }
 
                         .fi-sidebar {
-    position: fixed !important; /* Mengunci sidebar agar tidak ikut di-scroll */
-    top: 0 !important;
-    left: 0 !important;
-    height: 100vh !important; /* Tinggi penuh layar */
-    width: var(--sidebar-width) !important;
-    z-index: 50 !important; /* Pastikan di depan elemen lain */
-    background-color: var(--bg-dongker) !important;
-    border-right: 3px solid var(--primary-orange) !important;
-    overflow-y: auto !important; /* Jika menu sangat banyak, sidebar bisa di-scroll sendiri */
-}
-
-.fi-main {
-    /* Dorong konten ke kanan seluas sidebar */
-    margin-left: var(--sidebar-width, 16rem) !important;
-    width: calc(100% - var(--sidebar-width, 16rem)) !important;
-    min-height: 100vh !important;
-}
-
-/* Pastikan Navbar atas juga ikut bergeser */
-.fi-topbar {
-    margin-left: var(--sidebar-width, 16rem) !important;
-}
-
+                            width: var(--sidebar-width) !important;
+                            z-index: 50 !important; /* Pastikan di depan elemen lain */
+                            overflow-y: auto !important; /* Jika menu sangat banyak, sidebar bisa di-scroll sendiri */
+                        }
                         /* WARNA FONT SIDEBAR */
                         .fi-sidebar nav * {
                             color: white !important;
@@ -235,79 +215,100 @@ class AdminPanelProvider extends PanelProvider
                         }
 
                         /* --- HEADER SIDEBAR & LOGO --- */
-            .fi-sidebar-header {
-                position: relative !important;
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: center !important;
-                padding-top: 2rem !important;
-            }
+                        .fi-sidebar-header {
+                            position: relative !important;
+                            display: flex !important;
+                            flex-direction: column !important;
+                            align-items: center !important;
+                            padding-top: 2rem !important;
+                        }
 
-            .fi-sidebar-header a {
-                background-color: white !important;
-                width: 80px !important;
-                height: 80px !important;
-                border-radius: 50% !important;
-                display: flex !important;
-                justify-content: center !important;
-                align-items: center !important;
-                overflow: hidden !important;
-            }
+                        .fi-sidebar-header a {
+                            background-color: white !important;
+                            width: 80px !important;
+                            height: 80px !important;
+                            border-radius: 50% !important;
+                            display: flex !important;
+                            justify-content: center !important;
+                            align-items: center !important;
+                            overflow: hidden !important;
+                        }
 
-            /* TEKS DISKOMINFO */
-            .fi-sidebar-header::after {
-                content: 'DISKOMINFO\\A K O T A   B I N J A I';
-                white-space: pre;
-                text-align: center;
-                color: white;
-                font-weight: 800;
-                font-size: 0.9rem;
-                margin-top: 10px;
-                display: block;
-            }
+                        /* TEKS DISKOMINFO */
+                        .fi-sidebar-header::after {
+                            content: 'DISKOMINFO\\A K O T A   B I N J A I';
+                            white-space: pre;
+                            text-align: center;
+                            color: white;
+                            font-weight: 800;
+                            font-size: 0.9rem;
+                            margin-top: 10px;
+                            display: block;
+                        }
 
-            /* --- TOMBOL HAMBURGER (PERSIS GAMBAR) --- */
-            .fi-sidebar-collapse-button {
-                display: flex !important;
-                position: absolute !important;
-                right: 10px !important;
-                top: 15px !important;
-                background-color: #FFF0EB !important; /* Warna muda orange di gambar */
-                color: var(--primary-orange) !important;
-                border-radius: 8px !important;
-                padding: 6px !important;
-                z-index: 100;
-                transition: all 0.2s;
-            }
+                        /* --- TOMBOL HAMBURGER (PERSIS GAMBAR) --- */
+                        .fi-sidebar-collapse-button {
+                            display: flex !important;
+                            position: absolute !important;
+                            right: 10px !important;
+                            top: 15px !important;
+                            background-color: #FFF0EB !important; /* Warna muda orange di gambar */
+                            color: var(--primary-orange) !important;
+                            border-radius: 8px !important;
+                            padding: 6px !important;
+                            z-index: 100;
+                            transition: all 0.2s;
+                        }
 
-            /* Mengubah icon panah menjadi garis tiga (Hamburger) via CSS */
-            .fi-sidebar-collapse-button svg {
-                width: 24px !important;
-                height: 24px !important;
-            }
-            
-            /* Trik CSS: Sembunyikan icon asli, ganti dengan garis hamburger */
-            .fi-sidebar-collapse-button svg path { display: none !important; }
-            .fi-sidebar-collapse-button svg {
-                background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23FF6B35' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5' /%3E%3C/svg%3E\");
-                background-repeat: no-repeat;
-                background-position: center;
-            }
+                        /* Mengubah icon panah menjadi garis tiga (Hamburger) via CSS */
+                        .fi-sidebar-collapse-button svg {
+                            width: 24px !important;
+                            height: 24px !important;
+                        }
+                        
+                        /* Trik CSS: Sembunyikan icon asli, ganti dengan garis hamburger */
+                        .fi-sidebar-collapse-button svg path { display: none !important; }
+                        .fi-sidebar-collapse-button svg {
+                            background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23FF6B35' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5' /%3E%3C/svg%3E\");
+                            background-repeat: no-repeat;
+                            background-position: center;
+                        }
 
-            /* --- RESPONSIF SAAT SIDEBAR MENGECIL --- */
-            .fi-main-sidebar[style*='--sidebar-width: var(--sidebar-collapsed-width)'] .fi-sidebar-header::after {
-                display: none !important;
-            }
-            
-            /* Agar logo tetap kecil saat collapsed */
-            .fi-main-sidebar[style*='--sidebar-width: var(--sidebar-collapsed-width)'] .fi-sidebar-header a {
-                width: 45px !important;
-                height: 45px !important;
-            }
+                        /* --- RESPONSIF SAAT SIDEBAR MENGECIL --- */
+                        .fi-main-sidebar[style*='--sidebar-width: var(--sidebar-collapsed-width)'] .fi-sidebar-header::after {
+                            display: none !important;
+                        }
+                        
+                        /* Agar logo tetap kecil saat collapsed */
+                        .fi-main-sidebar[style*='--sidebar-width: var(--sidebar-collapsed-width)'] .fi-sidebar-header a {
+                            width: 45px !important;
+                            height: 45px !important;
+                        }
 
-            /* MENU ACTIVE */
-            .fi-sidebar-item-active { background-color: white !important; border-radius: 8px !important; }
-            .fi-sidebar-item-active * { color: black !important; }
+                        /* MENU ACTIVE */
+                        .fi-sidebar-item-active { background-color: white !important; border-radius: 8px !important; }
+                        .fi-sidebar-item-active * { color: black !important; }
+
+                        /* Pastikan layout utama memberikan padding kiri seukuran sidebar */
+.fi-layout {
+    display: flex !important;
+}
+
+/* Saat sidebar terbuka (lebar normal), beri margin pada konten */
+.fi-main-ctn {
+    transition: all 0.3s ease-in-out;
+}
+
+@media (min-width: 1024px) {
+    .fi-main {
+        margin-left: 0 !important; /* Reset jika ada fixed sebelumnya */
+    }
+}
+
+/* Mengatur transisi halus saat tombol hamburger diklik */
+.fi-sidebar {
+    transition: width 0.3s ease-in-out !important;
+}
                     </style>
                 "),
             )
