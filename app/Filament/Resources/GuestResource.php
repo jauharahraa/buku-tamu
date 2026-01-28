@@ -81,19 +81,21 @@ class GuestResource extends Resource
                     ->iconColor('gray'),
 
                 Tables\Columns\TextColumn::make('bidang')
-                    ->badge()
+                    ->label('Bidang') // Tambahkan label agar jelas
+                    ->searchable() // Agar bisa dicari
                     ->color(fn (string $state): string => match ($state) {
                         'Kepala Dinas', 'Sekretaris' => 'warning',
                         'Aplikasi dan Informatika (APTIKA)' => 'info',
                         'Informasi dan Komunikasi Publik (IKP)' => 'success',
-                        default => 'primary',
+                        // Tambahkan default yang kontras
+                        default => 'gray', 
                     }),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Waktu Kedatangan')
                     ->dateTime('d M Y')
                     ->description(fn ($record) => $record->created_at->format('H:i') . ' WIB')
-                    ->sortable(),
+                    ->badge(),
             ])
             ->filters([
                 SelectFilter::make('periode')

@@ -29,6 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login() 
+            ->sidebarCollapsible()
             ->darkMode(false)
             ->brandName('E-Tamu Diskominfo Binjai')
             ->brandLogo(asset('images/logo-binjai-removebg-preview.png'))
@@ -64,9 +65,28 @@ class AdminPanelProvider extends PanelProvider
                         }
 
                         .fi-sidebar {
-                            border-right: 3px solid var(--primary-orange) !important;
-                            position: relative !important;
-                        }
+    position: fixed !important; /* Mengunci sidebar agar tidak ikut di-scroll */
+    top: 0 !important;
+    left: 0 !important;
+    height: 100vh !important; /* Tinggi penuh layar */
+    width: var(--sidebar-width) !important;
+    z-index: 50 !important; /* Pastikan di depan elemen lain */
+    background-color: var(--bg-dongker) !important;
+    border-right: 3px solid var(--primary-orange) !important;
+    overflow-y: auto !important; /* Jika menu sangat banyak, sidebar bisa di-scroll sendiri */
+}
+
+.fi-main {
+    /* Dorong konten ke kanan seluas sidebar */
+    margin-left: var(--sidebar-width, 16rem) !important;
+    width: calc(100% - var(--sidebar-width, 16rem)) !important;
+    min-height: 100vh !important;
+}
+
+/* Pastikan Navbar atas juga ikut bergeser */
+.fi-topbar {
+    margin-left: var(--sidebar-width, 16rem) !important;
+}
 
                         /* WARNA FONT SIDEBAR */
                         .fi-sidebar nav * {
